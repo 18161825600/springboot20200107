@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springboot20200107.mapper.TicketMapper">
+  <resultMap id="BaseResultMap" type="com.example.springboot20200107.pojo.Ticket">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="scenic_spot_id" jdbcType="BIGINT" property="scenicSpotId" />
+    <result column="ticket_name" jdbcType="VARCHAR" property="ticketName" />
+    <result column="ticket_price_adult" jdbcType="DOUBLE" property="ticketPriceAdult" />
+    <result column="ticket_price_student" jdbcType="DOUBLE" property="ticketPriceStudent" />
+    <result column="ticket_number_adult" jdbcType="INTEGER" property="ticketNumberAdult" />
+    <result column="ticket_number_student" jdbcType="INTEGER" property="ticketNumberStudent" />
+    <result column="ticket_describe" jdbcType="VARCHAR" property="ticketDescribe" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, scenic_spot_id, ticket_name, ticket_price_adult, ticket_price_student, ticket_number_adult, 
+    ticket_number_student, ticket_describe, create_time, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.example.springboot20200107.pojo.TicketExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_ticket
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_ticket
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_ticket
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.example.springboot20200107.pojo.TicketExample">
+    delete from t_ticket
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.example.springboot20200107.pojo.Ticket">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_ticket (scenic_spot_id, ticket_name, ticket_price_adult, 
+      ticket_price_student, ticket_number_adult, ticket_number_student, 
+      ticket_describe, create_time, update_time
+      )
+    values (#{scenicSpotId,jdbcType=BIGINT}, #{ticketName,jdbcType=VARCHAR}, #{ticketPriceAdult,jdbcType=DOUBLE}, 
+      #{ticketPriceStudent,jdbcType=DOUBLE}, #{ticketNumberAdult,jdbcType=INTEGER}, #{ticketNumberStudent,jdbcType=INTEGER}, 
+      #{ticketDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.springboot20200107.pojo.Ticket">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_ticket
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="scenicSpotId != null">
+        scenic_spot_id,
+      </if>
+      <if test="ticketName != null">
+        ticket_name,
+      </if>
+      <if test="ticketPriceAdult != null">
+        ticket_price_adult,
+      </if>
+      <if test="ticketPriceStudent != null">
+        ticket_price_student,
+      </if>
+      <if test="ticketNumberAdult != null">
+        ticket_number_adult,
+      </if>
+      <if test="ticketNumberStudent != null">
+        ticket_number_student,
+      </if>
+      <if test="ticketDescribe != null">
+        ticket_describe,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="scenicSpotId != null">
+        #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="ticketName != null">
+        #{ticketName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketPriceAdult != null">
+        #{ticketPriceAdult,jdbcType=DOUBLE},
+      </if>
+      <if test="ticketPriceStudent != null">
+        #{ticketPriceStudent,jdbcType=DOUBLE},
+      </if>
+      <if test="ticketNumberAdult != null">
+        #{ticketNumberAdult,jdbcType=INTEGER},
+      </if>
+      <if test="ticketNumberStudent != null">
+        #{ticketNumberStudent,jdbcType=INTEGER},
+      </if>
+      <if test="ticketDescribe != null">
+        #{ticketDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.example.springboot20200107.pojo.TicketExample" resultType="java.lang.Long">
+    select count(*) from t_ticket
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_ticket
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.scenicSpotId != null">
+        scenic_spot_id = #{record.scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="record.ticketName != null">
+        ticket_name = #{record.ticketName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ticketPriceAdult != null">
+        ticket_price_adult = #{record.ticketPriceAdult,jdbcType=DOUBLE},
+      </if>
+      <if test="record.ticketPriceStudent != null">
+        ticket_price_student = #{record.ticketPriceStudent,jdbcType=DOUBLE},
+      </if>
+      <if test="record.ticketNumberAdult != null">
+        ticket_number_adult = #{record.ticketNumberAdult,jdbcType=INTEGER},
+      </if>
+      <if test="record.ticketNumberStudent != null">
+        ticket_number_student = #{record.ticketNumberStudent,jdbcType=INTEGER},
+      </if>
+      <if test="record.ticketDescribe != null">
+        ticket_describe = #{record.ticketDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_ticket
+    set id = #{record.id,jdbcType=BIGINT},
+      scenic_spot_id = #{record.scenicSpotId,jdbcType=BIGINT},
+      ticket_name = #{record.ticketName,jdbcType=VARCHAR},
+      ticket_price_adult = #{record.ticketPriceAdult,jdbcType=DOUBLE},
+      ticket_price_student = #{record.ticketPriceStudent,jdbcType=DOUBLE},
+      ticket_number_adult = #{record.ticketNumberAdult,jdbcType=INTEGER},
+      ticket_number_student = #{record.ticketNumberStudent,jdbcType=INTEGER},
+      ticket_describe = #{record.ticketDescribe,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.springboot20200107.pojo.Ticket">
+    update t_ticket
+    <set>
+      <if test="scenicSpotId != null">
+        scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT},
+      </if>
+      <if test="ticketName != null">
+        ticket_name = #{ticketName,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketPriceAdult != null">
+        ticket_price_adult = #{ticketPriceAdult,jdbcType=DOUBLE},
+      </if>
+      <if test="ticketPriceStudent != null">
+        ticket_price_student = #{ticketPriceStudent,jdbcType=DOUBLE},
+      </if>
+      <if test="ticketNumberAdult != null">
+        ticket_number_adult = #{ticketNumberAdult,jdbcType=INTEGER},
+      </if>
+      <if test="ticketNumberStudent != null">
+        ticket_number_student = #{ticketNumberStudent,jdbcType=INTEGER},
+      </if>
+      <if test="ticketDescribe != null">
+        ticket_describe = #{ticketDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.springboot20200107.pojo.Ticket">
+    update t_ticket
+    set scenic_spot_id = #{scenicSpotId,jdbcType=BIGINT},
+      ticket_name = #{ticketName,jdbcType=VARCHAR},
+      ticket_price_adult = #{ticketPriceAdult,jdbcType=DOUBLE},
+      ticket_price_student = #{ticketPriceStudent,jdbcType=DOUBLE},
+      ticket_number_adult = #{ticketNumberAdult,jdbcType=INTEGER},
+      ticket_number_student = #{ticketNumberStudent,jdbcType=INTEGER},
+      ticket_describe = #{ticketDescribe,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
